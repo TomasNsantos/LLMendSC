@@ -27,6 +27,8 @@ Essa sugestão é então validada por ferramentas de análise estática (como **
 
 ## 🧪 Experimentos
 
+
+
 ### ✅ Vantagens (Precisão e Automação)
 
 **Cenário:** Conjunto de contratos com falhas conhecidas.  
@@ -56,4 +58,30 @@ Essa sugestão é então validada por ferramentas de análise estática (como **
 Este projeto é parte da disciplina de TAES, com o objetivo de investigar contribuições práticas da IA generativa para atividades do ciclo de vida do software.
 
 ---
+
+## 🔐 Configuração da API da OpenAI (Uso Seguro)
+
+Este projeto utiliza a API da OpenAI para realizar tarefas de detecção e reparo de vulnerabilidades. Para garantir segurança e boas práticas:
+
+### ✅ 1. **Nunca exponha sua chave no código**
+
+Jamais insira sua chave diretamente no código Python. Use variáveis de ambiente via `.env`.
+
+### ⚙️ 2. Como configurar sua chave localmente
+
+```python
+#### a) Crie um arquivo `.env` na raiz do projeto:
+
+
+cp .env.example .env
+
+
+#### b) Adicione sua chave real no .env
+
+OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+OPENAI_API_BASE=https://api.openai.com/v1
+
+#### c) Rode o projeto normalmente
+ O carregamento da chave é feito automaticamente via config.py
+
 
