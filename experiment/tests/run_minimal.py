@@ -7,7 +7,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'
 from experiment.utils.tools import Detector
 
 # Carregar contrato
-with open("tests/test_contract.sol", "r") as f:
+with open("test_contract.sol", "r") as f:
     code = f.read()
 
 # Prompt simples
