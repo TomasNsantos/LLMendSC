@@ -1,6 +1,6 @@
 import json
 from time import sleep
-from utils.config import OPENAI_API_BASE, OPENAI_API_KEY
+from experiment.utils.config import OPENAI_API_BASE, OPENAI_API_KEY
 
 import openai
 

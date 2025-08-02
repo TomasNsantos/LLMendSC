@@ -3,3 +3,7 @@ __pycache__/
 .env
 outputs/
 checkpoints/
+venv/
+.env.example
+# Ignore Python cache files
+__pycache__/
