@@ -41,7 +41,7 @@ class Detector:
                     {"role": "user", "content": prompt}
                 ]
                 res = openai.ChatCompletion.create(
-                    model="gpt-3.5-turbo",
+                    model="gpt-4.1-nano",
                     messages=messages,
                     stream=False,
                 )
