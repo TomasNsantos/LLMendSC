@@ -7,11 +7,15 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'
 
 from experiment.utils.tools import Detector
 
-def analyze_contract(contract_file):
-    # Load contract
-    with open(contract_file, "r") as f:
-        code = f.read()
+# Folders
+INPUT_DIR = "contracts_to_analyze"
+OUTPUT_DIR = "corrected_contracts"
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
+# Max number of auto-correction attempts
+MAX_ITERATIONS = 3
+
+def analyze_contract(code):
     prompt = f"""
     Analyze the following Solidity smart contract code for security issues.
     Return the response strictly as a JSON object with the following keys:
@@ -36,39 +40,67 @@ def analyze_contract(contract_file):
     detector = Detector()
     result = detector.detect(prompt)
 
-    # Handle dict or string
     if isinstance(result, dict):
-        data = result
+        return result
+
+    try:
+        return json.loads(result)
+    except json.JSONDecodeError:
+        print("❌ Failed to parse JSON from model output.")
+        print(result)
+        return None
+
+# Process all .sol files
+for filename in os.listdir(INPUT_DIR):
+    if not filename.endswith(".sol"):
+        continue
+
+    print(f"\n🔍 Analyzing: {filename}")
+    contract_path = os.path.join(INPUT_DIR, filename)
+
+    try:
+        with open(contract_path, "r", encoding="utf-8") as f:
+            code = f.read()
+    except UnicodeDecodeError as e:
+        print(f"❌ Could not read file: {filename}: {e}")
+        continue
+
+    current_code = code
+    corrected_path = os.path.join(OUTPUT_DIR, filename)
+
+    for iteration in range(1, MAX_ITERATIONS + 1):
+        print(f"\n🔁 Iteration {iteration}...")
+
+        analysis = analyze_contract(current_code)
+        if not analysis:
+            print("⚠️ Skipping due to error in analysis.")
+            break
+
+        if analysis.get("vulnerable"):
+            vulnerabilities = analysis.get("vulnerabilities", [])
+            if vulnerabilities:
+                print("⚠️ Vulnerabilities found:")
+                for vuln in vulnerabilities:
+                    print(f"   - {vuln}")
+            else:
+                print("⚠️ Vulnerable, but no specific issues listed.")
+
+            corrected_code = analysis.get("corrected_code")
+            if not corrected_code:
+                print("❌ No corrected code returned.")
+                break
+
+            # Save only if the corrected code is different from current
+            if corrected_code.strip() != current_code.strip():
+                with open(corrected_path, "w", encoding="utf-8") as f:
+                    f.write(corrected_code)
+                print(f"💾 Corrected contract saved to {corrected_path}")
+            else:
+                print("ℹ️ Model returned the same code. No changes made.")
+
+            current_code = corrected_code
+        else:
+            print("✅ Contract is secure. No vulnerabilities found.")
+            break
     else:
-        try:
-            data = json.loads(result)
-        except json.JSONDecodeError:
-            print("The model did not return valid JSON. Output was:")
-            print(result)
-            sys.exit(1)
-    return data
-
-
-# 1. First analysis on original contract
-data = analyze_contract("test_contract.sol")
-
-# Save corrected contract if available
-corrected_code = data.get("corrected_code")
-if corrected_code:
-    output_file = "corrected_contract.sol"
-    with open(output_file, "w") as f:
-        f.write(corrected_code)
-    print(f"\nCorrected contract saved to {output_file}")
-
-    # 2. Second analysis on corrected contract
-    print("\nReanalyzing corrected contract...\n")
-    second_data = analyze_contract(output_file)
-
-    if second_data.get("vulnerable"):
-        print("⚠️ Issues still detected in the corrected contract:")
-        for v in second_data.get("vulnerabilities", []):
-            print("-", v)
-    else:
-        print("✅ No vulnerabilities found in the corrected contract!")
-else:
-    print("\nNo corrected code provided by the model.")
+        print("⚠️ Maximum iterations reached. Contract may still be vulnerable.")
