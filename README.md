@@ -50,12 +50,14 @@ Essa sugestão é então validada por ferramentas de análise estática (como **
 
 ## 👥 Equipe
 
-- Tomás Nascimento Santos ([tns](https://github.com/TomasNsantos))
-- [Seu Nome 2] (`username2`)  
-- [Seu Nome 3] (`username3`)  
-- [Seu Nome 4] (`username4`)  
+- Jônatas Ferreira da Silva ([Jonatas-jfs8](https://github.com/Jonatas-jfs8))
+- Mateus Viégas Martins Farias ([mattvie](https://github.com/mattvie))
+- Rodrigo Almeida Bezerra Duarte ([rod-duarte](https://github.com/rod-duarte))
+- Tomás Nascimento Santos ([TomasNsantos](https://github.com/TomasNsantos))
 
 Este projeto é parte da disciplina de TAES, com o objetivo de investigar contribuições práticas da IA generativa para atividades do ciclo de vida do software.
+
+[Slides da apresentação](https://docs.google.com/presentation/d/1D0Z2DrppGIy9OxlaDCWCeTzLQ6-ENBouxu_7Nmo47DM/).
 
 ---
 
