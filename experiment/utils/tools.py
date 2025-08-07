@@ -1,6 +1,6 @@
 import json
 from time import sleep
-from utils.config import OPENAI_API_BASE, OPENAI_API_KEY
+from experiment.utils.config import OPENAI_API_BASE, OPENAI_API_KEY
 
 import openai
 
@@ -41,7 +41,7 @@ class Detector:
                     {"role": "user", "content": prompt}
                 ]
                 res = openai.ChatCompletion.create(
-                    model="gpt-3.5-turbo",
+                    model="gpt-4.1-nano",
                     messages=messages,
                     stream=False,
                 )

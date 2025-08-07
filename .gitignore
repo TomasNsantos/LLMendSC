@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.env
+outputs/
+checkpoints/
+venv/
+.env.example
+# Ignore Python cache files
+__pycache__/
